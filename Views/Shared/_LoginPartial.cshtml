@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        @*<ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.GetUserName() <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Course I'm going</a></li>
+                        <li><a href="#">Lecture I'm flowing'</a></li>
+                        <li><a class="divider" role="separator"></a></li>
+                        <li><a href="javascript:document.getElementById('looutForm').submit()">Log off</a></li>
+                    </ul>
+                </li>
+            </ul>*@
+        <div class="container px-4 text-center align-items-center">
+            <div class="row gx-5">
+                <div class="col">
+                    <div class="p-3">
+                        @User.Identity.GetUserName()
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <a href="">Course I'm going</a>                        
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <a href="">Lecture I'm flowing</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <button class="btn btn-secondary" onclick="javascript:document.getElementById('looutForm').submit()">
+                            Log off
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <ul class="navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+    </ul>
+}
