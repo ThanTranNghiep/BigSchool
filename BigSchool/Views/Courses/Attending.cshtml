@@ -1,0 +1,78 @@
+﻿@* Model BigSchool.ViewModels.CoursesViewModel *@
+@{
+    ViewBag.Title = "Home Page";
+    var courses = Model;
+}
+<div class="container text-start">
+    @foreach (var item in courses.UpcommingCourses)
+    {
+        <div class="row justify-content-md-center align-items-center">
+            <div class="col col-lg-1 bg-danger text-center" style="border-radius: 20px">
+                @item.DateTime.ToString("MM")
+                <br />
+                @item.DateTime.ToString("dd")
+            </div>
+            <div class="col text-start ">
+                @item.Lecturer.Name
+                @* <button class="btn btn-dark btn-sm js-toggle-follow" data-user-id="@item.LecturerId"> *@
+                @*     Follow *@
+                @* </button> *@
+                @if (@courses.ShowAction)
+                {
+                    <button class="btn btn-dark btn-sm js-toggle-follow" data-user-id="@item.LecturerId">
+                        Follow
+                    </button>
+                }
+                <span class="text-primary">@item.Category.Name</span>
+                @if (@courses.ShowAction)
+                {
+                    <button data-course-id="@item.Id" class="btn btn-danger js-toggle-attendance">
+                        Going?
+                    </button>
+                }
+            </div>
+            @* <div class="col col-lg-1 text-center"> *@
+            @*     <button data-course-id="@item.Id" class="btn btn-danger js-toggle-attendance"> *@
+            @*         Going? *@
+            @*     </button> *@
+            @* </div> *@
+        </div>
+        <br />
+    }
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".js-toggle-attendance").click(function (e) {
+                var button = $(e.target);
+                $.post("/api/Attendances", {
+                    courseId: button.attr("data-course-id")
+                })
+                    .done(function () {
+                        button
+                            .removeClass("btn-danger")
+                            .addClass("btn-success")
+                            .text("Going");
+                    })
+                    .fail(function () {
+                        alert("Something failed!");
+                    });
+            });
+
+            $(".js-toggle-follow").click(function (e) {
+                var button = $(e.target);
+                $.post("/api/Followings", {
+                    followeeId: button.attr("data-user-id")
+                })
+                    .done(function () {
+                        button.text("Following");
+                    })
+                    .fail(function () {
+                        alert("Something failed!");
+                    });
+            });
+        });
+    </script>
+}
+
