@@ -1,27 +1,11 @@
-﻿@* Model BigSchool.ViewModels.CoursesViewModel *@
+﻿@using BigSchool.Models
+@using Microsoft.AspNet.Identity
+@* Model BigSchool.ViewModels.CoursesViewModel *@
 @{
     ViewBag.Title = "Home Page";
     var courses = Model;
 }
 
-@* <div class="container text-start"> *@
-@*     @foreach (var item in courses) *@
-@*     { *@
-@*         <div class="row"> *@
-@*             <div class="col"> *@
-@*                 @item.DateTime *@
-@*                 <span>-</span> *@
-@*                 @item.Lecturer.Name *@
-@*             </div> *@
-@*             $1$ <div class="col"> #1# *@
-@*             $1$      #1# *@
-@*             $1$ </div> #1# *@
-@*             $1$ <div class="col"> #1# *@
-@*             $1$      #1# *@
-@*             $1$ </div> #1# *@
-@*         </div> *@
-@*     } *@
-@* </div> *@
 
 <hr class="my-5" />
 <div class="container text-start">
@@ -35,14 +19,27 @@
             </div>
             <div class="col text-start ">
                 @item.Lecturer.Name
-                @* <button class="btn btn-dark btn-sm js-toggle-follow" data-user-id="@item.LecturerId"> *@
-                @*     Follow *@
-                @* </button> *@
+                @{
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    var lecturer = db.Courses.ToList();
+                    var user = User.Identity.GetUserId();
+                    var follow = db.Followings.Where(x => x.FollowerId == user);
+                }
                 @if (@courses.ShowAction)
                 {
-                    <button class="btn btn-dark btn-sm js-toggle-follow" data-user-id="@item.LecturerId">
-                        Follow
-                    </button>
+                    if (follow == null)
+                    {
+                        <button class="btn btn-dark btn-sm js-toggle-follow" data-user-id="@item.LecturerId">
+                            Follow
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-dark btn-sm js-toggle-follow" data-user-id="@item.LecturerId">
+                            Following
+                        </button>
+                    }
+                    
                 }
                 <span class="text-primary">@item.Category.Name</span>
                 @if (@courses.ShowAction)
@@ -52,11 +49,6 @@
                     </button>
                 }
             </div>
-            @* <div class="col col-lg-1 text-center"> *@
-            @*     <button data-course-id="@item.Id" class="btn btn-danger js-toggle-attendance"> *@
-            @*         Going? *@
-            @*     </button> *@
-            @* </div> *@
         </div>
         <br />
     }

@@ -1,8 +1,46 @@
-﻿@model System.Collections.Generic.List<BigSchool.Models.Course>
+﻿@using BigSchool.Models
+@using Microsoft.AspNet.Identity
+@model System.Collections.Generic.List<BigSchool.Models.Course>
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
+    // Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var courses = Model;
 }
 
-<h2>title</h2>
+<h2>Mine</h2>
+
+<div class="container text-start">
+    @foreach (var item in courses)
+    {
+        <div class="row justify-content-md-center align-items-center">
+            <div class="col col-lg-1 bg-danger text-center" style="border-radius: 20px">
+                @item.DateTime.ToString("MM")
+                <br/>
+                @item.DateTime.ToString("dd")
+            </div>
+            <div class="col text-start ">
+                <div class="row">
+                    <div class="col col-lg-2">
+                        @item.Lecturer.Name
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-1">
+                        <span class="text-primary">@item.Category.Name</span>
+                    </div>
+                </div>
+                <div class="row action">
+                    @* <div class="col col-lg-1"><a href="">Edit</a></div> *@
+                    @* <div class="col col-lg-1"><a href="">Delete</a></div> *@
+                    <div class="col col-lg-2">
+                        <a href="@Url.Action("Edit","Courses",new {id = @item.Id})">Edit</a> | <a href="">Delete</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br/>
+    }
+</div>
